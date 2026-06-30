@@ -1,0 +1,226 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CITIZEN
+  OFFICER
+  WARD_ADMIN
+  SUPER_ADMIN
+}
+
+enum BadgeType {
+  ROOKIE_REPORTER
+  CIVIC_PHOTOGRAPHER
+  CHANGE_MAKER
+  COMMUNITY_VOICE
+  TRUTH_SEEKER
+  CIVIC_CHAMPION
+  VOICE_OF_WARD
+  COMMUNITY_HERO
+  SHADOW_CITIZEN
+}
+
+enum IssueCategory {
+  ROAD_INFRASTRUCTURE
+  WATER_SANITATION
+  WASTE_MANAGEMENT
+  ELECTRICITY
+  PUBLIC_HEALTH
+  PARKS_RECREATION
+  BUILDING_SAFETY
+  OTHER
+}
+
+enum Severity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum IssueStatus {
+  PENDING
+  AI_PROCESSING
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED_VERIFIED
+  CLOSED_AUTO
+  REOPENED
+  DISPUTED
+}
+
+enum ActorType {
+  CITIZEN
+  OFFICER
+  SYSTEM
+  AI
+}
+
+model User {
+  id             String    @id @default(uuid())
+  email          String?   @unique
+  phone          String?   @unique
+  passwordHash   String?
+  displayName    String?
+  avatarUrl      String?
+  role           Role      @default(CITIZEN)
+  isAnonymous    Boolean   @default(false)
+  
+  // Gamification
+  xp             Int       @default(0)
+  level          Int       @default(1)
+  streakDays     Int       @default(0)
+  lastActiveAt   DateTime  @default(now())
+  
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  // Relations
+  badges         Badge[]
+  issues         Issue[]   @relation("ReportedIssues")
+  assignedIssues Issue[]   @relation("AssignedIssues")
+  upvotes        Upvote[]
+  events         IssueEvent[]
+}
+
+model Badge {
+  id        String    @id @default(uuid())
+  type      BadgeType
+  awardedAt DateTime  @default(now())
+  
+  // Relations
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+}
+
+model Ward {
+  id               String  @id @default(uuid())
+  wardCode         String  @unique
+  wardName         String
+  city             String
+  zone             String
+  areaSqkm         Float
+  population       Int
+  performanceScore Float   @default(100.0) // 0-100
+  
+  // Note: 'geom' (PostGIS Geometry) is intentionally omitted here as per the TRD.
+  // It will be managed exclusively via raw SQL in Phase 6.
+
+  // Relations
+  issues           Issue[]
+}
+
+model Issue {
+  id               String        @id @default(uuid())
+  ticketCode       String        @unique // e.g., CH-2024-ABC12
+  
+  // Reporter
+  reporterId       String?       // Nullable for anonymous reports
+  reporter         User?         @relation("ReportedIssues", fields: [reporterId], references: [id])
+  isAnonymous      Boolean       @default(false)
+  
+  // Details
+  title            String?
+  description      String
+  category         IssueCategory?
+  subCategory      String?
+  severity         Severity?
+  department       String?
+  
+  // Location
+  latitude         Float
+  longitude        Float
+  addressResolved  String?
+  corporationId    String?
+  corporation      Corporation?  @relation(fields: [corporationId], references: [id])
+  wardId           String?
+  ward             Ward?         @relation(fields: [wardId], references: [id])
+  
+  // AI processing (Gemini outputs)
+  aiConfidence     Float?
+  aiRaw            Json?
+  aiProcessedAt    DateTime?
+  
+  // Status & SLA
+  status           IssueStatus   @default(PENDING)
+  assignedOfficerId String?
+  assignedOfficer  User?         @relation("AssignedIssues", fields: [assignedOfficerId], references: [id])
+  slaDeadline      DateTime?
+  slaBreached      Boolean       @default(false)
+  
+  // Media & Proof
+  imageUrls        String[]
+  proofImageUrls   String[]
+  proofVerified    Boolean       @default(false)
+  
+  // Citizen Closure
+  citizenVerified  Boolean       @default(false)
+  citizenRating    Int?          // 1-5
+  citizenFeedback  String?
+  
+  // Gamification
+  upvoteCount      Int           @default(0)
+  xpAwarded        Int           @default(0)
+  
+  // Timestamps
+  submittedAt      DateTime      @default(now())
+  assignedAt       DateTime?
+  resolvedAt       DateTime?
+  closedAt         DateTime?
+
+  // Relations
+  upvotes          Upvote[]
+  events           IssueEvent[]
+}
+
+model Upvote {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  
+  // Relations
+  issueId   String
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // A user can only upvote a specific issue once
+  @@unique([issueId, userId])
+}
+
+model IssueEvent {
+  id          String    @id @default(uuid())
+  eventType   String    // e.g., "STATUS_CHANGED", "PROOF_UPLOADED"
+  actorType   ActorType
+  oldValue    Json?
+  newValue    Json?
+  occurredAt  DateTime  @default(now())
+  
+  // Relations
+  issueId     String
+  issue       Issue     @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  actorId     String?   // Nullable if the actor was SYSTEM or AI
+  actor       User?     @relation(fields: [actorId], references: [id])
+}
+
+model Corporation {
+  id               String  @id @default(uuid())
+  name             String  @unique // e.g. "Pune Municipal Corporation"
+  headquarters     String
+  helpline         String
+  whatsapp         String
+  appLink          String?
+  wardCount        Int
+  mayorName        String
+  commissionerName String
+  about            String  @db.Text
+  issues           Issue[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
