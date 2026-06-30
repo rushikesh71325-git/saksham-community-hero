@@ -1,8 +1,11 @@
 import axios from 'axios';
 
+// Use local environment variable if available, otherwise fallback to production URL
+const BASE_URL = import.meta.env.VITE_API_URL || 'https://saksham-community-hero.onrender.com/api/v1';
+
 // Create a centralized Axios instance pointing to our Node backend
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:3000/api/v1',
+  baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },

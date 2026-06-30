@@ -23,7 +23,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     const token = localStorage.getItem('token') || 'mock';
 
     // Connect to the Node.js Socket.IO server
-    const socketInstance = io('http://localhost:3000', {
+    const socketInstance = io('https://saksham-community-hero.onrender.com', {
       auth: { token },
       transports: ['websocket'], // Force websockets for lightning speed
     });
