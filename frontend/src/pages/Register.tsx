@@ -17,7 +17,7 @@ export default function Register() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/auth/register', {
+      const response = await axios.post('https://saksham-community-hero.onrender.com/api/v1/auth/register', {
         email,
         password,
         displayName,

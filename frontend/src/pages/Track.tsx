@@ -137,7 +137,7 @@ export default function Track() {
                     </p>
                     {trackedIssue.imageUrls && trackedIssue.imageUrls.length > 0 && (
                       <img 
-                        src={trackedIssue.imageUrls[0].startsWith('http') ? trackedIssue.imageUrls[0] : `http://localhost:3000${trackedIssue.imageUrls[0]}`}
+                        src={trackedIssue.imageUrls[0].startsWith('http') ? trackedIssue.imageUrls[0] : `https://saksham-community-hero.onrender.com${trackedIssue.imageUrls[0]}`}
                         alt="Reported" 
                         style={{ width: '200px', height: '140px', objectFit: 'cover', borderRadius: '8px', marginTop: '12px' }} 
                       />
@@ -164,7 +164,7 @@ export default function Track() {
 
                       {event.newValue?.proofUrl && (
                         <img 
-                          src={event.newValue.proofUrl.startsWith('http') ? event.newValue.proofUrl : `http://localhost:3000${event.newValue.proofUrl}`}
+                          src={event.newValue.proofUrl.startsWith('http') ? event.newValue.proofUrl : `https://saksham-community-hero.onrender.com${event.newValue.proofUrl}`}
                           alt="Proof" 
                           style={{ width: '200px', height: '140px', objectFit: 'cover', borderRadius: '8px', marginTop: '12px', border: '2px solid #22c55e' }} 
                         />

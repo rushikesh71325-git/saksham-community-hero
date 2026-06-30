@@ -295,7 +295,7 @@ export default function CommandCenter() {
                       <p style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>As reported (before)</p>
                       {selectedIssue.imageUrls && selectedIssue.imageUrls.length > 0 ? (
                         <img 
-                          src={selectedIssue.imageUrls[0].startsWith('http') ? selectedIssue.imageUrls[0] : `http://localhost:3000${selectedIssue.imageUrls[0]}`} 
+                          src={selectedIssue.imageUrls[0].startsWith('http') ? selectedIssue.imageUrls[0] : `https://saksham-community-hero.onrender.com${selectedIssue.imageUrls[0]}`} 
                           alt="Issue Evidence" 
                           style={{ width: '100%', height: '240px', objectFit: 'cover', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }} 
                         />

@@ -377,7 +377,7 @@ export default function Dashboard() {
                           {issue.imageUrls && issue.imageUrls.length > 0 && (
                             <div style={{ width: '100%', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--surface-border)', background: '#f1f5f9' }}>
                               <img 
-                                src={issue.imageUrls[0].startsWith('http') ? issue.imageUrls[0] : `http://localhost:3000${issue.imageUrls[0]}`}
+                                src={issue.imageUrls[0].startsWith('http') ? issue.imageUrls[0] : `https://saksham-community-hero.onrender.com${issue.imageUrls[0]}`}
                                 alt="Issue Evidence" 
                                 style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', display: 'block' }}
                               />

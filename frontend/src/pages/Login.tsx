@@ -16,7 +16,7 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:3000/api/v1/auth/login', {
+      const response = await axios.post('https://saksham-community-hero.onrender.com/api/v1/auth/login', {
         email,
         password
       });
