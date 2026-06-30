@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "saksham-community-her",
     "public": "dist",
     "ignore": [
       "firebase.json",

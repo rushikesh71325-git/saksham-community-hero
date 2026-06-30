@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { useNavigate } from 'react-router-dom';
-import { Camera, Brain, MapPin, Zap, ArrowRight, ShieldCheck, Activity } from 'lucide-react';
+import { Camera, Brain, Zap, ArrowRight, ShieldCheck, Activity } from 'lucide-react';
 import '../index.css';
 
 export default function Home() {

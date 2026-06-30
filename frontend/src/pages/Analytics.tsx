@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { apiClient } from '../api/client';
 import { 
@@ -119,7 +119,7 @@ export default function Analytics() {
                     dataKey="value"
                     stroke="none"
                   >
-                    {data.categoryBreakdown.map((entry, index) => (
+                    {data.categoryBreakdown.map((_, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>

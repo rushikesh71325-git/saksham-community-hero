@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import { apiClient } from '../api/client';
-import { Search, MapPin, User, MessageSquare, Camera, CheckCircle, Eye } from 'lucide-react';
+import { Search, MapPin, User, MessageSquare, Camera, CheckCircle } from 'lucide-react';
 
 interface Issue {
   id: string;
