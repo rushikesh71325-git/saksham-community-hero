@@ -26,12 +26,9 @@ build/
 Thumbs.db
 
 # Ignored Hackathon / System Markdown Files
-Build Phase Guidelines.md
-mentor_prompt.md
-meraward_architecture.md
-prd.md
-trd.md
+*.md
 
 # Allowed Markdown files:
-# !README.md
-# !Project_Description.md
+!README.md
+!Project_Description.md
+!frontend/README.md
